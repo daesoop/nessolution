@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:v-bind="http://www.w3.org/1999/xhtml">
+
+<head>
+    <title>Product Detail</title>
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/axios@0.19.0/dist/axios.min.js"></script>
+</head>
+<body>
+
+<div id="detail"  @submit="productUpdateSubmit">
+    판매자 이메일 : <span th:text="${product.userid}"></span> <br>
+    상품명 : <span th:text="${product.productname}"></span> <br>
+    상세 설명 : <span th:text="${product.description}"></span> <br>
+    <img src="abc.png" th:src="@{(${img})}">
+</div>
+<form th:action="@{/product/update/{id}(id=${product.id})}" method="get" id="product">
+    <input type="submit" value="상품 수정"/>
+</form>
+<form @submit="deleteProductSubmit" method="post" id="deleteProduct">
+    <input type="hidden" name="_method" value="delete"/>
+    <div><input type="submit" value="상품 삭제"/></div>
+</form>
+<script type="text/javascript" th:inline="javascript">
+    var id = /*[[${product.id}]]*/;
+    var vm = new Vue({
+        el : "#deleteProduct",
+        methods : {
+            deleteProductSubmit : function(e) {
+                e.preventDefault();
+                alert("성공!!!!!!")
+                var url = "/product/delete/" + id;
+                var memberEmail = localStorage.getItem("loginUserEmail");
+                var formData = new FormData();
+                formData.append('memberEmail', memberEmail);
+                alert(memberEmail);
+                axios.delete(url, {params: { memberEmail : memberEmail} }).then(response => {
+                        this.message = response.data;
+                        alert("삭제 성공ㅋ")
+                        window.location.href = "/";
+                    }).catch((ex)=> {
+                        alert('상품 등록이 제대로 되지 않았습니다.' + ex)
+                })
+            }
+        }
+    })
+</script>
+</body>
+</html>

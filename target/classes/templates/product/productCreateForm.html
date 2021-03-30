@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:v-on="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/axios@0.19.0/dist/axios.min.js"></script>
+    <title>Upload Product</title>
+</head>
+<body>
+<div style="width:100%"><h1 style="margin:auto;">상품 생성</h1></div>
+<h2>상품 생성</h2>
+
+<form th:action="@{/productUpdate/{id}}" method="post" @submit="productUploadSubmit" id="createProduct">
+    <div><label> 상품 이름 : <input type="text" v-model="productName" name="productName"/> </label></div>
+    <div><label> 상세 설명 : <input type="text" v-model ="description" name="description"/> </label></div>
+        <div id="fileUpload">
+            <label>File
+                <input type="file" id="file" ref="file" v-on:change="handleFileUpload()"/>
+            </label>
+        </div>
+    <div><input type="submit" value="상품 등록"/></div>
+</form>
+
+<!--<script>-->
+  <!--var vm = new Vue({-->
+    <!--el : "#fileUpload",-->
+    <!--data(){-->
+      <!--return {-->
+        <!--file: ''-->
+      <!--}-->
+    <!--},-->
+    <!--methods: {-->
+      <!--submitFile(){-->
+            <!--alert("2")-->
+            <!--let formData = new FormData();-->
+            <!--formData.append('file', this.file);-->
+            <!--axios.post('/file/upload',-->
+                 <!--formData,-->
+                <!--{-->
+                <!--headers: {-->
+                        <!--'Content-Type': 'multipart/form-data'-->
+                        <!--}-->
+                <!--}-->
+            <!--).then(function(){-->
+          <!--console.log('SUCCESS!!');-->
+        <!--})-->
+        <!--.catch(function(){-->
+          <!--console.log('FAILURE!!');-->
+        <!--});-->
+      <!--},-->
+
+      <!--/*-->
+        <!--Handles a change on the file upload-->
+      <!--*/-->
+      <!--handleFileUpload(){-->
+        <!--alert("3");-->
+        <!--this.file = this.$refs.file.files[0];-->
+      <!--}-->
+    <!--}-->
+  <!--})-->
+<!--</script>-->
+<script>
+        var vm = new Vue({
+            el : "#createProduct",
+            data : {
+                productName : "",
+                description : "",
+                file : ""
+            },
+            methods : {
+                productUploadSubmit : function(e) {
+                    e.preventDefault();
+                    var url = "http://localhost:8080/productUpload";
+                    var obj = {
+                        email : localStorage.getItem("loginUserEmail"),
+                        productname : this.productName,
+                        description : this.description,
+                    }
+                    var formData = new FormData();
+                    formData.append("file", this.file);
+                    formData.append("email", localStorage.getItem("loginUserEmail"));
+                    formData.append("productname", this.productName);
+                    formData.append("description", this.description);
+                    alert("ds")
+                    axios.post(url, formData, {
+                         headers: {
+                            'Content-Type': "multipart/form-data"
+                         }
+                    }).then(response => {
+                        this.message = response.data;
+                        console.log(response.data)
+                        alert("성공!!!!!")
+                        window.location.href = "/";
+                    }).catch((ex)=> {
+                        alert('상품 등록이 제대로 되지 않았습니다.' + ex)
+                    })
+                },
+                handleFileUpload(){
+                    alert("v-on change working");
+                    this.file = this.$refs.file.files[0];
+                }
+            }
+        })
+
+</script>
+</body>
+</html>

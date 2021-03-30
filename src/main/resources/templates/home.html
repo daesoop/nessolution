@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3" xmlns:v-on="http://www.w3.org/1999/xhtml">
+    <head>
+        <title>Spring Security Example</title>
+        <script src="https://unpkg.com/vue/dist/vue.js"></script>
+        <script src="https://unpkg.com/axios@0.19.0/dist/axios.min.js"></script>
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <!-- 합쳐지고 최소화된 최신 자바스크립트 -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+        <!-- 부가적인 테마 -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+    </head>
+    <body>
+        <h1>Welcome!</h1>
+
+        <p>Click <a th:href="@{/member/loginForm}">here</a> Login.</p>
+        <p>Click <a th:href="@{/member/createUser}">here</a> Create User.</p>
+        <p>Click <a th:href="@{/member/findEmailForm}">here</a> Find Email.</p>
+        <p>Click <a th:href="@{/member/findPasswordForm}">here</a> Find Password.</p>
+
+        <form method="get" @submit="logoutSubmit" id="logout">
+            <input type="submit" value="Sign Out"/>
+        </form>
+
+        <form th:action="@{/api/member/changePasswordForm}" method="get">
+            <input type="submit" value="Change Password"/>
+        </form>
+
+
+        <form th:action="@{/product/productUpload}" method="get">
+            <input type="submit" value="Product Upload"/>
+        </form>
+
+        <table class="table" id="productTable">
+            <thead>
+            <tr>
+                <th>id</th>
+                <th>userid</th>
+                <th>productname</th>
+                <th>description</th>
+                <th>productimg</th>
+            </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+
+        <div id="pageDiv" style="text-align: center">
+            <button v-on:click="getPageData(1)">Get Data22</button>
+        </div>
+
+        <script>
+            var totalCount = 0;
+            var currentIndex = 0;
+            var totalPageCount = 0;
+            var countPerPage = 3;
+
+            var vm = new Vue({
+                el : "#logout",
+                methods : {
+                    logoutSubmit : function(e) {
+                        e.preventDefault();
+                        var url = "/customLogout"
+                        localStorage.removeItem("loginUserEmail")
+                        localStorage.removeItem("boolean")
+                        window.location.href = "/customLogout";
+                    }
+                }
+            })
+
+            var getDataVue = new Vue({
+                el : "#productTable",
+                methods : {
+                    getData : function(page) {
+                        axios.get('http://localhost:8080/getPagedProduct?page=' + page + '&size=' + countPerPage)
+                            .then(response => {
+                                $('#productTable > tbody:last').empty();
+                                    $.each(response.data.content, function() {
+                                        $('#productTable').append('<tr onclick="javascript:clickTable(' + this.id + ')"><td>' + this.id + '</td><td>' + this.userid + '</td><td>' + this.productName + '</td><td>' + this.description + '</td><td>' + this.productimg + '</td></tr>');
+                                    });
+                            });
+                    }
+                }
+            })
+
+            function clicktest(nPage) {
+                getDataVue.getData(nPage);
+            };
+
+            function clickTable(id) {
+                location.href = "/page/product/" + id;
+            }
+
+            window.addEventListener("load", function(event) {
+                new Vue({
+                    el: '#productTable',
+
+                    mounted:function() {
+                        this.getList();
+                    },
+
+                    methods : {
+                        getList : function() {
+                            axios.get('http://localhost:8080/getAllProduct')
+                                 .then(response => {
+                                    totalCount = response.data.length;
+                                    totalPageCount = totalCount / countPerPage;
+                                    currentIndex = 0;
+
+                                    axios.get('http://localhost:8080/getPagedProduct?page=' + currentIndex + '&size=' + countPerPage)
+                                         .then(response => {
+                                            $.each(response.data.content, function() {
+                                                        $('#productTable').append('<tr onclick="javascript:clickTable(' + this.id + ')"><td>' + this.id + '</td><td>' + this.userid + '</td><td>' + this.productName + '</td><td>' + this.description + '</td><td>' + this.productimg + '</td></tr>');
+
+                                                    });
+                                         });
+
+                                     var pageDiv = document.getElementById('pageDiv');
+                                        var aTag = '';
+
+                                        for(var i = 1 ; i <= totalPageCount ; i++) {
+                                            aTag = aTag + '<button onclick="clicktest(' + i + ')">' + i + '</button>';
+                                        }
+
+                                        pageDiv.innerHTML = aTag;
+                                 });
+
+                        }
+                    }
+                });
+            });
+
+        </script>
+    </body>
+</html>

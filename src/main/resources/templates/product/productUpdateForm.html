@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:v-on="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/axios@0.19.0/dist/axios.min.js"></script>
+    <title>Product Edit</title>
+<body>
+<h2>상품 수정</h2>
+
+상품 번호 : <span th:text="${product.id}" v-model="id" name="id"></span> <br>
+<form method="post" @submit="productUploadSubmit" id="updateProduct">
+    <input type="hidden" name="_method" value="put"/>
+    <div><label> 상품 이름 : <input type="text" v-model="productName" name="productName"/> </label></div>
+    <div><label> 상세 설명 : <input type="text" v-model ="description" name="description"/> </label></div>
+    <div id="fileUpload">
+        <label>File
+            <input type="file" id="file" ref="file" v-on:change="handleFileUpload()"/>
+        </label>
+    </div>
+    <div><input type="submit" value="상품 등록"/></div>
+</form>
+<script type="text/javascript" th:inline="javascript">
+        var id = /*[[ ${product.id}]]*/;
+        var vm = new Vue({
+            el : "#updateProduct",
+            data : {
+                productName : "",
+                description : "",
+                file : "",
+            },
+            methods : {
+                productUploadSubmit : function(e) {
+                    e.preventDefault();
+                    var url = "http://localhost:8080/productUpdate/"+id;
+                    var obj = {
+                        email : localStorage.getItem("loginUserEmail"),
+                        productname : this.productName,
+                        description : this.description
+                    }
+                    var formData = new FormData();
+                    formData.append("file", this.file);
+                    formData.append("email", localStorage.getItem("loginUserEmail"));
+                    formData.append("productname", this.productName);
+                    formData.append("description", this.description);
+                    axios.post(url, formData, {
+                         headers: {
+                            'Content-Type': "multipart/form-data"
+                         }
+                    }).then(response => {
+                        this.message = response.data;
+                        console.log(response.data)
+                        window.location.href = "http://localhost:7080/";
+                    }).catch((ex)=> {
+                        alert('상품 등록이 제대로 되지 않았습니다.' + ex)
+                    })
+                },
+                handleFileUpload(){
+                    alert("v-on change working");
+                    this.file = this.$refs.file.files[0];
+                }
+            }
+        })
+
+</script>
+
+</body>
+</html>

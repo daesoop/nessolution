@@ -1,0 +1,18 @@
+{
+  "groups": [
+    {
+      "name": "file",
+      "type": "nessolution.common.file.service.FileProperties",
+      "sourceType": "nessolution.common.file.service.FileProperties"
+    }
+  ],
+  "properties": [
+    {
+      "name": "file.location",
+      "type": "java.lang.String",
+      "description": "Folder location for storing files",
+      "sourceType": "nessolution.common.file.service.FileProperties"
+    }
+  ],
+  "hints": []
+}

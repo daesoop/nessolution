@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+    <title>Login Please</title>
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/axios@0.19.0/dist/axios.min.js"></script>
+</head>
+<body>
+<template>
+    <div>
+        <h1>Login Page</h1>
+        <paginated-list :list-array="pageArray"/>
+    </div>
+</template>
+<div th:if="${param.error}">
+    Invalid username and password.
+</div>
+<div th:if="${param.logout}">
+    You have been logged out.
+</div>
+<div>
+    <form th:action="@{/loginUser}" method="post" @submit="loginSubmit" id="login">
+        <input type="hidden" name="spring-security-redirect" value="<c:out value='${param.r}' />">
+        <!--<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />-->
+        <div><label> Email : <input type="text" v-model="username" name="username"/> </label></div>
+        <div><label> Password: <input type="password" v-model="password" name="password"/> </label></div>
+        <div><input type="submit" value="Sign In"/></div>
+    </form>
+    <form th:action="@{/}" method="get">
+        <input type="submit" value="Home"/>
+    </form>
+    <form th:action="@{/hello}" method="get" @submit="helloSubmit" id="hello">
+        <input type="submit" value="Hello"/>
+    </form>
+    <form th:action="@{/productUpload}" method="get" id="product">
+        <input type="submit" value="상품 등록"/>
+    </form>
+</div>
+<script>
+         var vm = new Vue({
+            el : "#login",
+            data : {
+                username : "",
+                password : ""
+            },
+
+            methods : {
+                loginSubmit : function(e) {
+                    e.preventDefault();
+                    var url = "/loginUser";
+                    var ref = this;
+
+                    axios.post(url, {
+                        username : this.username,
+                        password : this.password
+                    }).then(response => {
+                        localStorage.setItem("loginUserEmail", this.username)
+                        localStorage.setItem("boolean", true)
+                        window.location.href = '/';
+                    }).catch((ex)=> {
+                        alert('이메일과 비밀번호를 확인해주세요.')
+                    })
+                }
+            }
+        })
+
+</script>
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+
+<!-- 부가적인 테마 -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+
+<!-- 합쳐지고 최소화된 최신 자바스크립트 -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+</body>
+</html>

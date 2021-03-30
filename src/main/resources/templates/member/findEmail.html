@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Find Email</title>
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/axios@0.19.0/dist/axios.min.js"></script>
+</head>
+<body>
+<form th:action="@{/findEmail}" method="post" @submit="findEmailSubmit" id="findEmail">
+    <div><label> Phone Number: <input type="text" v-model="phoneNumber" name="phoneNumber"/> </label></div>
+    <div><input type="submit"/></div>
+</form>
+<form th:action="@{/loginForm}" method="get">
+    <input type="submit" value="Login"/>
+</form>
+<form th:action="@{/findPasswordForm}" method="get">
+    <input type="submit" value="Find Password"/>
+</form>
+<script>
+         var vm = new Vue({
+            el : "#findEmail",
+            data : {
+                phoneNumber : ""
+            },
+            methods : {
+                findEmailSubmit(e) {
+                    e.preventDefault();
+                    var url = "/findEmail";
+                    console.log("url : " , url);
+                    axios.post(url, {
+                    phoneNumber :  this.phoneNumber
+                    }).then(response => {this.message = response.data
+                        alert("username : " + this.message);
+                    })
+                }
+            }
+        })
+
+</script>
+
+</body>
+</html>
