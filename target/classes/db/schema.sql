@@ -6,4 +6,4 @@ CREATE TABLE MEMBER(
 )
 
 INSERT INTO USER (SEQ, NAME)
-VALUES(1, 'daesoop');
+VALUES(1, 'daesoop')
