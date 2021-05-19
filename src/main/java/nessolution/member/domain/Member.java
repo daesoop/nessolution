@@ -1,9 +1,12 @@
 package nessolution.member.domain;
 
+import nessolution.Product.domain.Product;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Random;
 
 @Entity
@@ -33,6 +36,9 @@ public class Member {
     @Column(name = "LASTPASSWORDRESETDATE")
     @Temporal(TemporalType.TIMESTAMP)
     private Date lastPasswordResetDate;
+
+    @OneToMany(mappedBy = "member")
+    private List<Product> product;
 
     public Member() {
     }

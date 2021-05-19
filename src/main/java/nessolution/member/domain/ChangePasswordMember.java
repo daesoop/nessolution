@@ -29,4 +29,5 @@ public class ChangePasswordMember {
     public void setChangedPassword(String changedPassword) {
         this.changedPassword = changedPassword;
     }
+
 }

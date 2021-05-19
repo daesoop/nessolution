@@ -27,6 +27,8 @@ public class ApiMemberController {
 
     @PostMapping("/createUser")
     public ResponseEntity createUser(@RequestBody MemberDto memberDto) {
+        System.out.println("------------------------");
+        System.out.println("member name : " + memberDto.getUsername());
          memberService.createUser(memberDto.getUsername(), memberDto.getPassword(), memberDto.getCheckPassword(), memberDto.getPhoneNumber());
         return new ResponseEntity(HttpStatus.OK);
     }

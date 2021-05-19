@@ -11,7 +11,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import nessolution.Product.dao.ProductRepository;
+//import nessolution.Product.dao.ProductRepository;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
@@ -19,8 +19,8 @@ import static org.slf4j.LoggerFactory.getLogger;
 public class MainController {
     private static final Logger logger = getLogger(MainController.class);
 
-    @Autowired
-    private ProductRepository productRepository;
+//    @Autowired
+//    private ProductRepository productRepository;
 
     @GetMapping("/hello")
     public String home(HttpServletRequest request, HttpServletResponse response) {
@@ -50,5 +50,11 @@ public class MainController {
     public String home() {
         System.out.println("HOME 동작");
         return "/home";
+    }
+
+    @GetMapping("/index")
+    public String index() {
+        System.out.println("index test");
+        return "/index";
     }
 }

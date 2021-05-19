@@ -20,4 +20,5 @@ public class FindMember {
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
+
 }

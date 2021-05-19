@@ -3,14 +3,21 @@ package nessolution.member.service;
 
 import nessolution.exception.CannotCreateUserException;
 import nessolution.exception.UnAuthorizedException;
+import nessolution.security.jwt.JwtTokenUtil;
+import nessolution.security.jwt.JwtUser;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import nessolution.member.domain.ChangePasswordMember;
 import nessolution.member.domain.Member;
 import nessolution.member.domain.MemberRepository;
+
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -22,11 +29,31 @@ public class MemberService {
 
     private static final Logger logger = getLogger(MemberService.class);
 
+    @Value("${jwt.header}")
+    private String tokenHeader;
+
+    @Autowired
+    @Qualifier("jwtUserDetailsService")
+    private UserDetailsService userDetailsService;
+
+    @Autowired
+    private JwtTokenUtil jwtTokenUtil;
+
+
+
     @Autowired
     private MemberRepository memberRepository;
 
     public MemberService(MemberRepository memberRepository) {
         this.memberRepository = memberRepository;
+    }
+
+    public JwtUser checkUserWithJWT(HttpServletRequest request) {
+        String authToken = request.getHeader(tokenHeader);
+        final String token = authToken.substring(7);
+        String username = jwtTokenUtil.getUsernameFromToken(token);
+        JwtUser user = (JwtUser) userDetailsService.loadUserByUsername(username);
+        return user;
     }
 
     public Member createUser(String email, String password, String checkPassword, String phoneNumber) {
@@ -114,5 +141,10 @@ public class MemberService {
         } catch (NoSuchElementException e) {
             return "찾으시는 사용자가 존재하지 않습니다. 입력 정보를 확인해주세요.";
         }
+    }
+
+    public String findRoleByEmail(String email) {
+        Member member = memberRepository.findByEmail(email).orElseThrow(RuntimeException::new);
+        return member.getRole();
     }
 }

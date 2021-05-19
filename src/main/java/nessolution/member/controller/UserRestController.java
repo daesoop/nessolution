@@ -14,8 +14,7 @@ import nessolution.security.jwt.JwtTokenUtil;
 @RestController
 public class UserRestController {
 
-    @Value("${jwt.header}")
-    private String tokenHeader;
+    private String tokenHeader = "Authorization";
 
     @Autowired
     private JwtTokenUtil jwtTokenUtil;

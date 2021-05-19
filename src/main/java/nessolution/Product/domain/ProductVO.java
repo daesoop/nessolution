@@ -13,7 +13,7 @@ public class ProductVO {
 
     private String email;
 
-    private String productname;
+    private String productName;
 
     private String description;
 
@@ -35,12 +35,12 @@ public class ProductVO {
         this.email = email;
     }
 
-    public String getProductname() {
-        return productname;
+    public String getProductName() {
+        return productName;
     }
 
-    public void setProductname(String productname) {
-        this.productname = productname;
+    public void setProductName(String productName) {
+        this.productName = productName;
     }
 
     public String getDescription() {

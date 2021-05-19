@@ -29,7 +29,7 @@ public class ApiAuthenticationController {
 
 
     @PostMapping("/find/email")
-    public ResponseEntity<String> findEmial(@RequestBody FindMember member) {
+    public ResponseEntity<String> findEmail(@RequestBody FindMember member) {
 
         logger.info("이메일 찾기 컨트롤러 " + member.getPhoneNumber());
         String email = memberService.findEmail(member.getPhoneNumber());

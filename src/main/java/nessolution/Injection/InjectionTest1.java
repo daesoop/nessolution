@@ -1,4 +1,4 @@
-package nessolution.Injection;
-
-public class InjectionTest1 {
-}
+//package nessolution.Injection;
+//
+//public class InjectionTest1 {
+//}

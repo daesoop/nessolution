@@ -42,7 +42,7 @@ public class JwtUser implements UserDetails {
 
     @Override
     public String getUsername() {
-        System.out.println("=====JwtUser getUserName=====");
+        System.out.println("=====JwtUser getUserName=====" + username);
         return username;
     }
 

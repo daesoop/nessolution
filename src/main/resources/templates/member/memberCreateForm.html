@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
-      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3" xmlns:v-on="http://www.w3.org/1999/xhtml">
 <head>
     <title>Create User Form </title>
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/axios@0.19.0/dist/axios.min.js"></script>
 </head>
 <body>
 <div th:if="${param.error}">
@@ -11,12 +13,43 @@
 <div th:if="${param.logout}">
     You have been logged out.
 </div>
-<form th:action="@{/member/createUser}" method="post">
-    <div><label> Email : <input type="text" name="username"/> </label></div>
-    <div><label> Password: <input type="password" name="password"/> </label></div>
-    <div><label> Check Password: <input type="password" name="checkPassword"/> </label></div>
-    <div><label> Phone Number: <input type="text" name="phoneNumber"/> </label></div>
+<form method="post" @submit="createMemberSubmit" id="createMember">
+    <div><label> Email : <input type="text" v-model="username" name="username"/> </label></div>
+    <div><label> Password: <input type="password" v-model="password" name="password"/> </label></div>
+    <div><label> Check Password: <input type="password" v-model="checkPassword" name="checkPassword"/> </label></div>
+    <div><label> Phone Number: <input type="text" v-model="phoneNumber" name="phoneNumber"/> </label></div>
     <div><input type="submit" value="Create"/></div>
 </form>
+
+<script>
+    new Vue({
+        el : "#createMember",
+        data : {
+            username : "",
+            password : "",
+            checkPassword : "",
+            phoneNumber : ""
+        },
+        methods : {
+            createMemberSubmit : function(e) {
+                 e.preventDefault();
+                    var url = "http://localhost:8080/member/createUser";
+                    alert("url : " + url)
+                    axios.post(url,{
+                        username : this.username,
+                        password : this.password,
+                        checkPassword : this.checkPassword,
+                        phoneNumber : this.phoneNumber
+                    }).then(response => {
+                        this.message = response.data;
+                        alert("성공")
+                        window.location.href = "/";
+                    }).catch((ex)=> {
+                        alert(ex)
+                    })
+            }
+        }
+    })
+</script>
 </body>
 </html>

@@ -46,10 +46,6 @@ public class MemberDto {
         return checkPassword;
     }
 
-    public void setCheckPassword(String checkPassword) {
-        this.checkPassword = checkPassword;
-    }
-
     public String getPhoneNumber() {
         return phoneNumber;
     }

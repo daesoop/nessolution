@@ -1,5 +1,7 @@
 package nessolution.Product.domain;
 
+import nessolution.member.domain.Member;
+
 import javax.persistence.*;
 
 @Entity
@@ -7,38 +9,40 @@ import javax.persistence.*;
 public class Product {
 
     @Id
+    @Column(name = "ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    private String productname;
+    private String productName;
 
     private String description;
 
-    private String productimg;
+    private String productTime;
 
-    private String userid;
+    @ManyToOne
+    @JoinColumn(name = "member", foreignKey = @ForeignKey(name = "FK_member"))
+    private Member member;
 
     public Product() {
     }
 
-    public Product(String email, String productname) {
-        this.userid = email;
-        this.productname = productname;
+    public Product(Member member, String productName) {
+        this.member = member;
+        this.productName = productName;
     }
 
-    public Product(String email, String productname, String description) {
-        this.userid = email;
-        this.productname = productname;
+    public Product(Member member, String productName, String description) {
+        this.member = member;
+        this.productName = productName;
         this.description = description;
     }
 
-    public Product(String email, String productname, String description, String productimg) {
-        this.userid = email;
-        this.productname = productname;
+    public Product(Member member, String productName, String description, String productTime) {
+        this.member = member;
+        this.productName = productName;
         this.description = description;
-        this.productimg = productimg;
+        this.productTime = productTime;
     }
-
 
 
     public long getId() {
@@ -49,20 +53,20 @@ public class Product {
         this.id = id;
     }
 
-    public String getUserid() {
-        return userid;
+    public Member getMember() {
+        return member;
     }
 
-    public void setUserid(String userid) {
-        this.userid = userid;
+    public void setMember(Member member) {
+        this.member = member;
     }
 
-    public String getProductname() {
-        return productname;
+    public String getProductName() {
+        return productName;
     }
 
-    public void setProductname(String productName) {
-        this.productname = productName;
+    public void setProductName(String productName) {
+        this.productName = productName;
     }
 
     public String getDescription() {
@@ -73,11 +77,11 @@ public class Product {
         this.description = description;
     }
 
-    public void setProductimg(String productimg) {
-        this.productimg = productimg;
+    public void setProductTime(String productTime) {
+        this.productTime = productTime;
     }
 
-    public String getProductimg() {
-        return productimg;
+    public String getProductTime() {
+        return productTime;
     }
 }
