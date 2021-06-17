@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import nessolution.exception.AuthenticationException;
 import nessolution.member.domain.ChangePasswordMember;
 import nessolution.member.domain.FindMember;
-import nessolution.member.service.MemberService;
+import nessolution.member.service.MemberServiceSec;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
@@ -23,9 +23,9 @@ public class ApiAuthenticationController {
     private static final Logger logger = getLogger(ApiAuthenticationController.class);
 
     @Autowired
-    private MemberService memberService;
+    private MemberServiceSec memberService;
 
-    private String tokenHeader;
+    private String tokenHeader  ;
 
 
     @PostMapping("/find/email")

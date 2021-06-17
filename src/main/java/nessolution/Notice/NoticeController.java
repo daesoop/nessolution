@@ -34,12 +34,19 @@ public class NoticeController {
 
     @PostMapping("")
     public ResponseEntity<Notice> create(@Valid @RequestBody NoticeDto noticeDto, HttpServletRequest request) {
-        Notice notice = noticeService.createNotice(noticeDto ,request);
+        Notice notice = null;
+        try {
+            notice = noticeService.createNotice(noticeDto ,request);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<Notice>(notice, HttpStatus.FORBIDDEN);
+        }
         return new ResponseEntity<Notice>(notice, HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Notice> update(@PathVariable long id, @RequestBody String comment) {
+        Notice notice = noticeService.updateNotice(id, comment);
         return new ResponseEntity<Notice>(noticeService.updateNotice(id, comment), HttpStatus.OK);
     }
 

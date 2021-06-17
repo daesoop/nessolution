@@ -6,7 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import nessolution.member.service.MemberService;
+import nessolution.member.service.MemberServiceSec;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
@@ -17,9 +17,9 @@ public class MemberController {
     private static final Logger logger = getLogger(MemberController.class);
 
     @Autowired
-    private MemberService userService;
+    private MemberServiceSec userService;
 
-    public MemberController(MemberService userService) {
+    public MemberController(MemberServiceSec userService) {
         this.userService = userService;
     }
 

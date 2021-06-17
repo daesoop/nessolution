@@ -2,6 +2,7 @@ package nessolution.Notice;
 
 import nessolution.exception.UnAuthorizedException;
 import nessolution.member.domain.Member;
+import nessolution.member.service.MemberServiceSec;
 import nessolution.security.jwt.JwtTokenUtil;
 import nessolution.security.jwt.JwtUser;
 import org.aspectj.weaver.ast.Not;
@@ -24,13 +25,15 @@ public class NoticeService {
     @Autowired
     private NoticeRepository noticeRepository;
 
+    @Autowired
+    private MemberServiceSec memberService;
 
-    public Notice createNotice(NoticeDto noticeDto, HttpServletRequest request) {
-//        JwtUser user = memberService.checkUserWithJWT(request);
-//        boolean check = checkMemberRoleForNotice(user);
-//        if (check == false) {
-//
-//        }
+    public Notice createNotice(NoticeDto noticeDto, HttpServletRequest request) throws Exception {
+        JwtUser user = memberService.checkUserWithJWT(request);
+        boolean check = checkMemberRoleForNotice(user);
+        if (check == false) {
+            throw new UnAuthorizedException();
+        }
         Notice notice = noticeRepository.save(noticeDto._toNotice());
         return notice;
     }
@@ -46,12 +49,12 @@ public class NoticeService {
         noticeRepository.delete(notice);
     }
 
-//    public boolean checkMemberRoleForNotice(JwtUser user) {
-//        String email = user.getUsername();
-//        String role = memberService.findRoleByEmail(email);
-//        if (role != "master") {
-//            return false;
-//        }
-//        return true;
-//    }
+    public boolean checkMemberRoleForNotice(JwtUser user) {
+        String email = user.getUsername();
+        String role = memberService.findRoleByEmail(email);
+        if (role != "master") {
+            return false;
+        }
+        return true;
+    }
 }

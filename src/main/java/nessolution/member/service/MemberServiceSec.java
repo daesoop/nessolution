@@ -25,9 +25,9 @@ import java.util.NoSuchElementException;
 import static org.slf4j.LoggerFactory.getLogger;
 
 @Service
-public class MemberService {
+public class MemberServiceSec {
 
-    private static final Logger logger = getLogger(MemberService.class);
+    private static final Logger logger = getLogger(MemberServiceSec.class);
 
     @Value("${jwt.header}")
     private String tokenHeader;
@@ -44,7 +44,7 @@ public class MemberService {
     @Autowired
     private MemberRepository memberRepository;
 
-    public MemberService(MemberRepository memberRepository) {
+    public MemberServiceSec(MemberRepository memberRepository) {
         this.memberRepository = memberRepository;
     }
 

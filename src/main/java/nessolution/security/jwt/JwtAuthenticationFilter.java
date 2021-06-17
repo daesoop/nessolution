@@ -56,7 +56,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 if ("jwtToken".equals(getCookie[i].getName())) {
                     this.requestHeader = getCookie[i].getValue();
                 }
-                logger.info("==========token : " + getCookie[i].getValue());
+                logger.info("====== token : " + getCookie[i].getValue() + "======");
             }
         }
 
@@ -66,7 +66,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String authToken = null;
         if (this.requestHeader != null && this.requestHeader.startsWith("Bearer")) {
             authToken = requestHeader.substring(6);
-            System.out.println("Filter의 authToken = " + authToken);
+            System.out.println("Filter 의 authToken = " + authToken);
             try {
                 username = jwtTokenUtil.getUsernameFromToken(authToken);
             } catch (IllegalArgumentException e) {
@@ -102,6 +102,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         chain.doFilter(request, response);
         this.requestHeader = null;
-        System.out.println("==== dofilter 의 끝==== : ");
+        System.out.println("==== end of doFilter==== : ");
     }
 }

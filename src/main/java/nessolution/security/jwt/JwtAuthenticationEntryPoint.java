@@ -23,10 +23,10 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint, Se
     public void commence(HttpServletRequest request,
                          HttpServletResponse response,
                          AuthenticationException authException) throws IOException {
-        System.out.println("======JwtAuthenticationEntryPoint==========");
+        System.out.println("======Jwt Authentication EntryPoint==========");
         // This is invoked when user tries to access a secured REST resource without supplying any credentials
         // We should just send a 401 Unauthorized response because there is no 'login page' to redirect to
-        logger.info("test entrypoint : " + request.getRequestedSessionId());
+        logger.info("test entry point : " + request.getRequestedSessionId());
         response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
     }
 }

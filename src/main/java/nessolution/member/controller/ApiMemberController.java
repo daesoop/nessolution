@@ -1,6 +1,6 @@
 package nessolution.member.controller;
 
-import nessolution.member.service.MemberService;
+import nessolution.member.service.MemberServiceSec;
 import org.slf4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,9 +19,9 @@ public class ApiMemberController {
 
     private static final Logger logger = getLogger(ApiMemberController.class);
 
-    private MemberService memberService;
+    private MemberServiceSec memberService;
 
-    public ApiMemberController(MemberService memberService) {
+    public ApiMemberController(MemberServiceSec memberService) {
         this.memberService = memberService;
     }
 
